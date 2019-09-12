@@ -1,0 +1,75 @@
+dubbo:
+  scan:
+    base-packages: com.seckill.analysis
+  protocols:
+    dubbo:
+      name: dubbo
+      port: -1
+  registries:
+    new:
+      address: spring-cloud://localhost
+#  registry:
+#   The Spring Cloud Dubbo's registry extension
+#    address: spring-cloud://localhost
+#   The traditional Dubbo's registry
+#   address: nacos://127.0.0.1:8848
+
+spring:
+  datasource:
+    # 使用druid数据源
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/dr?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
+    username: root
+    password: mysql
+    filters: stat
+    maxActive: 20
+    initialSize: 1
+    maxWait: 60000
+    minIdle: 1
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: select 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxOpenPreparedStatements: 20
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  redis:
+    lettuce:
+      pool:
+        max-idle: 15
+        min-idle: 5
+    host: redis-01.db.sit.ihomefnt.org
+    port: 6379
+    password: aijia1234567
+    database: 1
+
+feign:
+  hystrix:
+    enabled: true
+
+server:
+  port: 9091
+  servlet:
+    context-path: /seckill-web
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: dubborestmetadata
+logging:
+  config: classpath:log/logback-dev.xml
+
+wx:
+  miniapp:
+    configs:
+      - appid: wxd33f4755b635f0d2
+        secret: 82308ed8e370aa8ca6d92be5f9d219eb
+        token: 123456
+        aesKey: 123456
+        msgDataFormat: JSON

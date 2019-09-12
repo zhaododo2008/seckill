@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+
+	<property name="tomcat_app_base" value="seckill-web" />
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36}  -%msg%n </pattern>
+		</layout>
+	</appender>
+
+	<appender name="baseAppender"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>/opt/ihome/logs/tomcat/app/${tomcat_app_base}/seckill-web-log.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>
+				/opt/ihome/logs/tomcat/app/${tomcat_app_base}/archive/seckill-web-log.%d{yyyy-MM-dd}.log
+			</FileNamePattern>
+		</rollingPolicy>
+		<layout>
+			<Pattern>%-20(%d{HH:mm:ss.SSS} [%thread]) %-5level %logger{32}  -%msg%n</Pattern>
+		</layout>
+	</appender>
+
+	<appender name="profileAppender"
+			  class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>/opt/ihome/logs/tomcat/app/${tomcat_app_base}/profile-log.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>
+				/opt/ihome/logs/tomcat/app/${tomcat_app_base}/archive/profile-log.%d{yyyy-MM-dd}.log
+			</FileNamePattern>
+		</rollingPolicy>
+		<layout>
+			<Pattern>%-20(%d{HH:mm:ss.SSS} [%thread]) %-5level %logger{32}  -%msg%n</Pattern>
+		</layout>
+	</appender>
+
+	<appender name="errorAppender"
+			  class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>/opt/ihome/logs/tomcat/app/${tomcat_app_base}/error.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>
+				/opt/ihome/logs/tomcat/app/${tomcat_app_base}/archive/error.%d{yyyy-MM-dd}.log
+			</FileNamePattern>
+		</rollingPolicy>
+		<layout>
+			<Pattern>%-20(%d{HH:mm:ss.SSS} [%thread]) %-5level %logger{32}  -%msg%n</Pattern>
+		</layout>
+		<!-- 只打印错误日志 -->
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>ERROR</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+	</appender>
+
+	<!--耗时日志-->
+	<logger name="profile" level="INFO" additivity="false">
+		<appender-ref ref="profileAppender"/>
+	</logger>
+
+	<!--应用日志-->
+	<logger name="com.seckill" level="INFO" additivity="true">
+		<appender-ref ref="baseAppender" />
+	</logger>
+
+	<logger name="com.baomidou.mybatisplus" level="DEBUG" additivity="true">
+		<appender-ref ref="baseAppender" />
+	</logger>
+
+	<root level="ERROR">
+		<appender-ref ref="errorAppender" />
+	</root>
+</configuration>
